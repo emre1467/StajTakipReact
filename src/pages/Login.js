@@ -36,7 +36,7 @@ export default function Login() {
                 ))
                 if(e.data.success==true){
                     console.log(e.data.success)
-                    window.location.assign(`http://localhost:3000/myPage/${e.data.data[0].studentId}/profil`)
+                    window.location.assign(`https://staj-takip-react.vercel.app//myPage/${e.data.data[0].studentId}/profil`)
 
                 }
                 else if(e.data.success==false){

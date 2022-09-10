@@ -7,23 +7,61 @@ import { Button, Card, Form, FormSelect, Select } from 'semantic-ui-react';
 import CompanyService from "../services/companyService"
 import InternshipRequestService from "../services/internshipRequestService"
 import PeriodService from "../services/periodService";
-import { storage } from "./firebase"
+import { storage } from "./firebase-config"
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
-
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
+import { db } from "./firebase-config"
 
 
 export default function AddInternshipRequest() {
     let { id } = useParams();
 
+    const companyCollectionRef = collection(db, "companies")
+    const periodCollectionRef = collection(db, "periods")
+    const internshipCollectionRef = collection(db, "internshipRequests")
+    
+    const createInternshipRequest=async ()=>{
+        
+        const docref=await addDoc(internshipCollectionRef,{confirm:values.confirm,company:values.company,period:values.period,isgName:values.isgName,isgUrl:values.isgUrl,internshipformName:values.internshipformName,internshipformUrl:values.internshipformUrl,müstehaklıkUrl:values.müstehaklıkUrl,müstehaklıkName:values.müstehaklıkName,startDate:values.startDate,endDate:values.endDate,workDay:values.workDay,stuId:id,id:10})
+       const stuDoc=doc(db,"internshipRequests",docref.id)
+       await updateDoc(stuDoc,{id:docref.id})
+     
+     
+     }
+
+
+   
+
+
     let internshipRequestService = new InternshipRequestService();
     const [companies, setCompanies] = useState([]);
     const [periods, setPeriods] = useState([]);
-    const [i,setI]=useState()
+    const [i, setI] = useState()
     useEffect(() => {
-        let companyService = new CompanyService();
-        companyService.getCompanies().then((result) => setCompanies(result.data.data))
-        let periodService = new PeriodService();
-        periodService.getPeriods().then((result) => setPeriods(result.data.data))
+        //let companyService = new CompanyService();
+        //companyService.getCompanies().then((result) => setCompanies(result.data.data))
+        //let periodService = new PeriodService();
+        //periodService.getPeriods().then((result) => setPeriods(result.data.data))
+
+        const getCompanies = async () => {
+            let data = await getDocs(companyCollectionRef);
+            setCompanies(data.docs.map((doc) => ({ ...doc.data() })))
+            //console.log(studentCollectionRef)
+            
+        }
+        //students.map((stu) => setId(stu.id))
+        getCompanies().then(() => console.log(companies))
+
+
+        const getPeriods = async () => {
+            //console.log(studentCollectionRef)
+            let data = await getDocs(periodCollectionRef);
+            setPeriods(data.docs.map((doc) => ({ ...doc.data() })))
+
+        }
+        //students.map((stu) => setId(stu.id))
+        getPeriods().then(() => console.log(periods))
+
     }, [])
 
     const {
@@ -41,19 +79,18 @@ export default function AddInternshipRequest() {
 
     } = useFormik({
         initialValues: {
-            company: { companyId: "" },
-            period: { periodId: "" },
+            company: "",
+            period: "",
             confirm: "Onaylanmayı bekliyor",
             isgName: "",
             isgUrl: "",
             internshipformName: "",
             internshipformUrl: "",
             müstehaklıkUrl: "",
-            müstehaklıkName:"",
+            müstehaklıkName: "",
             startDate: "",
             endDate: "",
             workDay: "",
-            student: { studentId: 1 },
         },
         validationSchema: Yup.object({
             companyCompanyId: Yup.number().required("Bir şirket seçiniz"),
@@ -64,49 +101,42 @@ export default function AddInternshipRequest() {
 
         }),
         onSubmit: (values) => {
-            },
+        },
     });
-    function gönder(){
-        let p=0;
-        while(p<1){
-            p=p+1;
-        deneme()
-
-        }
-    }
+    
     function deneme() {
-        let k=0;
-       let j=0;
+        let k = 0;
+        let j = 0;
         while (j < 1) {
 
-            values.student.studentId = id
-            while(k<1){
-                k=k+1;
-            console.log("içinde")
+           // values.student.studentId = id
+            while (k < 1) {
+                k = k + 1;
+                console.log("içinde")
 
                 formHandler()
             }
-         
-          
 
-            j=j+1;
+
+
+            j = j + 1;
         }
         console.log("dışında")
 
 
     }
-    
+
 
     const companiesOptions = companies.map((company) => ({
-        key: company.companyId,
+        key: company.id,
         text: company.name,
-        value: company.companyId,
+        value: company.id,
     }));
 
     const periodsOptions = periods.map((period) => ({
-        key: period.periodId,
+        key: period.id,
         text: period.name,
-        value: period.periodId,
+        value: period.id,
     }));
 
     const [isg, setIsg] = useState()
@@ -115,7 +145,7 @@ export default function AddInternshipRequest() {
     //************************* */
 
 
-//****************** */
+    //****************** */
 
     const [progress, setProgress] = useState(0)
     const [progress2, setProgress2] = useState(0)
@@ -133,7 +163,7 @@ export default function AddInternshipRequest() {
     };
     const uploadFiles = (file) => {
         if (!file) return;
-        const storageRef = ref(storage, `/files/${file.name}`)
+        const storageRef = ref(storage, `/files/${file.lastModified}`)
         const uploadTask = uploadBytesResumable(storageRef, file)
         uploadTask.on("state_changed", (snapshot) => {
             const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -142,9 +172,9 @@ export default function AddInternshipRequest() {
 
         }, (err) => console.log(err),
             () => {
-                console.log("form handler1")
-                values.müstehaklıkName=file.name
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => values.müstehaklıkUrl = url).finally(()=>formHandlerIsg())
+                console.log(file)
+                values.müstehaklıkName = file.name
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => values.müstehaklıkUrl = url).finally(() => formHandlerIsg())
             }
         )
     };
@@ -155,13 +185,13 @@ export default function AddInternshipRequest() {
     const formHandlerIsg = () => {
         isg.preventDefault();
         const file = isg.target.files[0];
-        console.log("form handler2-1")
+        console.log(id)
 
         uploadFilesIsg(file)
     };
     const uploadFilesIsg = (file) => {
         if (!file) return;
-        const storageRef = ref(storage, `/files/${file.name}`)
+        const storageRef = ref(storage, `/files/${file.lastModified}`)
         const uploadTask = uploadBytesResumable(storageRef, file)
         uploadTask.on("state_changed", (snapshot) => {
             const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -172,8 +202,8 @@ export default function AddInternshipRequest() {
             () => {
                 values.isgName = file.name
                 console.log("form isg")
-                
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => values.isgUrl = url).finally(()=>formHandlerForm())
+
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => values.isgUrl = url).finally(() => formHandlerForm())
             }
         )
     };
@@ -190,7 +220,7 @@ export default function AddInternshipRequest() {
     };
     const uploadFilesForm = (file) => {
         if (!file) return;
-        const storageRef = ref(storage, `/files/${file.name}`)
+        const storageRef = ref(storage, `/files/${file.lastModified}`)
         const uploadTask = uploadBytesResumable(storageRef, file)
         uploadTask.on("state_changed", (snapshot) => {
             const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -202,7 +232,7 @@ export default function AddInternshipRequest() {
                 values.internshipformName = file.name
                 console.log("form form")
 
-                getDownloadURL(uploadTask.snapshot.ref).then((url) => values.internshipformUrl = url).finally(()=>internshipRequestService.addInternshipRequest(values).then(result => alert("Staj talebi eklendi")))
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => values.internshipformUrl = url).finally(()=>createInternshipRequest())
             }
         )
     };
@@ -212,20 +242,20 @@ export default function AddInternshipRequest() {
 
     return (
         <div align="center" className="form" style={{ marginTop: '50px', marginLeft: '130px' }} >
-            <Card style={{color:"deepskyblue"}}>
+            <Card style={{ color: "deepskyblue" }}>
                 <Card.Content >
-                    <Card.Header  style={{color:"deepskyblue"}}>Staj Talebi Oluştur</Card.Header>
+                    <Card.Header style={{ color: "deepskyblue" }}>Staj Talebi Oluştur</Card.Header>
                 </Card.Content>
                 <Card.Content>
-                    <Form size="tiny"style={{color:"deepskyblue"}}>
+                    <Form size="tiny" style={{ color: "deepskyblue" }}>
                         <Form.Group widths="equal" >
                             <FormSelect
-                                id="company.companyId"
-                                onChange={(fieldname, data) => setFieldValue("company.companyId", data.value)}
+                                id="company"
+                                onChange={(fieldname, data) => setFieldValue("company", data.value)}
                                 onBlur={onBlur}
                                 options={companiesOptions}
                                 label="Şirket"
-                                value={values.company.companyId}
+                                value={values.company}
                                 placeholder='Şirket seçiniz'
                                 search
                                 selection
@@ -236,8 +266,8 @@ export default function AddInternshipRequest() {
                         </Form.Group>
                         <Form.Group >
                             <FormSelect
-                                id="period.periodId"
-                                onChange={(fieldname, data) => setFieldValue("period.periodId", data.value)}
+                                id="period"
+                                onChange={(fieldname, data) => setFieldValue("period", data.value)}
                                 onBlur={onBlur}
                                 options={periodsOptions}
                                 label="Dönem"
@@ -267,7 +297,7 @@ export default function AddInternshipRequest() {
 
                         <Form.Group widths="equal"  >
                             <Form.Input
-                            style={{color:"deepskyblue"}}
+                                style={{ color: "deepskyblue" }}
                                 id="startDate"
                                 type="date"
                                 onChange={handleChange}
@@ -328,9 +358,9 @@ export default function AddInternshipRequest() {
 
 
 
-                        <Link style={{marginRight:"20px",color:"deepskyblue"}} to={`/myPage/${id}/AddCompany`}>Şirket Talebi</Link>
-                        <Button style={{backgroundColor:"deepskyblue",color:"white"}} type="submit" onClick={deneme} >Oluştur</Button>
-<h4>Yükleniyor  {progress3}</h4>
+                        <Link style={{ marginRight: "20px", color: "deepskyblue" }} to={`/myPage/${id}/AddCompany`}>Şirket Talebi</Link>
+                        <Button style={{ backgroundColor: "deepskyblue", color: "white" }} type="submit" onClick={deneme} >Oluştur</Button>
+                        <h4>Yükleniyor  {progress3}</h4>
                     </Form>
                 </Card.Content>
             </Card>

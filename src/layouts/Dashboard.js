@@ -27,6 +27,9 @@ import UncertainInternshipRequest from '../pages/UncertainInternshipRequest';
 import RejectedInternshipRequest from '../pages/RejectedInternshipRequest';
 import InternshipRequestDetail from '../pages/InternshipRequestDetail';
 import Profil from '../pages/Profil';
+import FirebaseDeneme from '../pages/FirebaseDeneme';
+import AddStudent2 from '../pages/AddStudent2';
+
 
 export default function Dashboard() {
     return (
@@ -36,6 +39,9 @@ export default function Dashboard() {
             <Route exact path="/2" component={FirebaseFile} />
             <Route exact path="/3" component={AddCompany} />
             <Route exact path="/adminLogin" component={AdminLogin} />
+            <Route exact path="/4" component={FirebaseDeneme} />
+            <Route exact path="/5" component={AddStudent2} />
+
 
 
 

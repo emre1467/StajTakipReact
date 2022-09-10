@@ -3,12 +3,22 @@ import { useFormik } from 'formik';
 import * as Yup from "yup";
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
-import { storage } from "./firebase"
+import { storage } from "./firebase-config"
 import CompanyService from '../services/companyService';
+import { db } from "./firebase-config"
+import { collection, getDocs,addDoc, query,where,updateDoc ,doc} from "firebase/firestore"
 
-
+const companyCollectionRef = collection(db, "companies")
 
 export default function AddCompany() {
+  const createCompany=async ()=>{
+
+      const docref=await addDoc(companyCollectionRef,{name:values.name,address:values.address,phoneNumber:values.phoneNumber,protocolUrl:values.protocolUrl,confirm:values.confirm,id:10})
+      const stuDoc=doc(db,"companies",docref.id)
+      await updateDoc(stuDoc,{id:docref.id})
+    
+  
+  }
   let companyService = new CompanyService();
   const {
     values,
@@ -46,15 +56,20 @@ export default function AddCompany() {
   function gönder() {
     dene()
   }
-  const [d, setD] = useState();
   let j = 0;
 
   function dene() {
     let i = 0;
     while (i < 1) {
-      formHandler()
+      if(values.name==""||values.address==""||values.phoneNumber==""||z==null){
+        alert("Alanları Boş bırakmayınız")
+        
+      }else{
+        formHandler()
 
+      }
 
+console.log(values)
 
 
       
@@ -67,13 +82,18 @@ export default function AddCompany() {
 
 
   const formHandler = () => {
+    console.log("form")
     z.preventDefault();
     const file = z.target.files[0];
     uploadFiles(file)
+    
   };
   const uploadFiles = (file) => {
     if (!file) return;
-    const storageRef = ref(storage, `/files/${file.name}`)
+    console.log(file)
+    console.log(values)
+
+    const storageRef = ref(storage, `/company/${values.phoneNumber}`)
     const uploadTask = uploadBytesResumable(storageRef, file)
     uploadTask.on("state_changed", (snapshot) => {
       const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -82,9 +102,9 @@ export default function AddCompany() {
 
     }, (err) => console.log(err),
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => values.protocolUrl = url).finally(()=>companyService.addCompany(values).then(result => console.log(result)))
-     //then(companyService.addCompany(values).then(result => console.log(result)))
-       
+        //getDownloadURL(uploadTask.snapshot.ref).then((url) => values.protocolUrl = url).finally(()=>companyService.addCompany(values).then(result => console.log(result)))
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => values.protocolUrl = url).finally(()=>createCompany())
+       console.log(values.protocolUrl+"dcs")
       
       }
     )
@@ -145,7 +165,7 @@ export default function AddCompany() {
 
             </Form.Group>
 
-            <Button type="submit" onClick={gönder} >oluştur</Button>
+            <Button type="submit" handleSubmit={handleSubmit} onClick={gönder} >oluştur</Button>
             <h3 > Yükleniyor {progress}</h3>
 
           </Form>

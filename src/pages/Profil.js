@@ -4,28 +4,42 @@ import { useFormik } from "formik";
 import StudentService from '../services/studentService'
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
-
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
+import { db } from "./firebase-config"
 export default function Profil() {
-let {id}=useParams();
-const [s,setS]=useState([])
-let studentService = new StudentService();
+    let { id } = useParams();
+    const [s, setS] = useState([])
+    let studentService = new StudentService();
+    const studentCollectionRef = collection(db, "students")
 
-useEffect(function(){
-  studentService.getById(id).then(result=>setS(result.data.data[0]))
- 
-console.log(s)
+    useEffect(function () {
+       // studentService.getById(id).then(result => setS(result.data.data[0]))
 
-},[])
-function çal(){
-        values.password=s.password
-        values.email=s.email
-        values.name=s.name
-        values.surname=s.surname
-        values.department=s.department
-        values.studentNo=s.studentNo
-        values.studentId=id;
+
+        const q = query(studentCollectionRef, where("id", "==", id))
+        const getStudents = async () => {
+            let data = await getDocs(q);
+            setS(data.docs.map((doc) => ({ ...doc.data() })))
+            //console.log(studentCollectionRef)
+
+
+        }
+        //students.map((stu) => setId(stu.id))
+        getStudents().then(() => console.log(s))
+
+
+
+    }, [])
+    function çal() {
+        values.password = s.password
+        values.email = s.email
+        values.name = s.name
+        values.surname = s.surname
+        values.department = s.department
+        values.studentNo = s.studentNo
+        values.studentId = id;
     }
-let dp=(s);
+    let dp = (s);
 
     const {
         values,
@@ -38,9 +52,9 @@ let dp=(s);
         dirty,
     } = useFormik({
         initialValues: {
-            department:"",//Güncellemek için içine değer yaz
+            department: "",//Güncellemek için içine değer yaz
             email: "",
-            name:"",
+            name: "",
             password: "",
             studentId: "0",
             studentNo: "",
@@ -55,16 +69,16 @@ let dp=(s);
             surname: Yup.string().required("Soyadınızı giriniz"),
         }),
         onSubmit: (values) => {
-            values.studentId = id;
-            console.log(values);
-           studentService.updateStudent(values).then(result=>console.log(result))
-alert("Bilgileriniz güncellendi")
+            //values.studentId = id;
+           // console.log(values);
+            //studentService.updateStudent(values).then(result => console.log(result))
+            //alert("Bilgileriniz güncellendi")
         },
     });
-    
+
     return (
 
-        <div className="form" align="center"  style={{marginTop:"80px"}} onLoad={çal()}>
+        <div className="form" align="center" style={{ marginTop: "80px" }} onLoad={çal()}>
             <Card   >
                 <Card.Content header="BİLGİLERİM"></Card.Content>
                 <Card.Content>
@@ -77,7 +91,7 @@ alert("Bilgileriniz güncellendi")
                                 type="text"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                value={values.name }
+                                value={values.name}
 
                                 error={
                                     errors.name && touched.name && errors.name}
@@ -131,10 +145,10 @@ alert("Bilgileriniz güncellendi")
                                 id="password"
                                 type="text"
                                 onChange={handleChange}
-                                 onBlur={handleBlur}
+                                onBlur={handleBlur}
                                 value={values.password}
 
-                            label="Şifre"
+                                label="Şifre"
                             //placaholder="Şifre girinizz"
                             ></Form.Input>
                         </Form.Group>
@@ -152,7 +166,7 @@ alert("Bilgileriniz güncellendi")
                             ></Form.Input>
                         </Form.Group>
 
-                        <Button  type="submit" primary> GÜNCELLE</Button>
+                        <Button type="submit" primary> GÜNCELLE</Button>
                     </Form>
                 </Card.Content>
             </Card>

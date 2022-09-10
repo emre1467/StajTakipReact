@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
-import { Button, Card, List, Table } from 'semantic-ui-react';
+import { Button, Card, Icon, List, Table } from 'semantic-ui-react';
 import CompanyService from '../services/companyService';
 
 
@@ -42,13 +42,14 @@ function Reddet(){
                     </Table.Row>
 
                 </Table.Header>
-                <Table.Body>{
+                <Table.Body >{
                     companies.map((company) => (
 
                         <Table.Row key={company.companyId}>
                             <Table.Cell>{company.name}</Table.Cell>
                             <Table.Cell >{company.address}</Table.Cell>
-                            <Table.Cell >{company.protocolUrl}</Table.Cell>
+            
+                            <Table.Cell ><a href={(company.protocolUrl)} target="_blank" ><Icon size="small" circular name='file pdf' />Protokol</a></Table.Cell>
                             <Table.Cell >{company.phoneNumber}</Table.Cell>
                             <Table.Cell >{company.confirm}</Table.Cell>
 

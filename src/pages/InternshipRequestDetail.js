@@ -80,7 +80,7 @@ export default function InternshipRequestDetail() {
                         <Table.Row key={intern.id}>
                             <Table.Cell>{intern.company.name}</Table.Cell>
                             <Table.Cell >{intern.company.address}</Table.Cell>
-                            <Table.Cell><a href={(intern.company.protocolUrl)} target="_blank">Protokol</a></Table.Cell>
+                            <Table.Cell><a href={(intern.company.protocolUrl)} target="_blank"><Icon size="small" circular name='file pdf' />Protokol</a></Table.Cell>
                             <Table.Cell >{intern.company.phoneNumber}</Table.Cell>
                             <Table.Cell >{intern.company.confirm}</Table.Cell>
                         </Table.Row>
@@ -110,9 +110,9 @@ export default function InternshipRequestDetail() {
                         <Table.Row key={intern.id}>
                             <Table.Cell >{intern.period.name}</Table.Cell>
                             <Table.Cell >{intern.confirm}</Table.Cell>
-                            <Table.Cell><a href={(intern.isgUrl)} target="_blank">İsg Belgesi</a></Table.Cell>
-                            <Table.Cell><a href={(intern.müstehaklıkUrl)} target="_blank">Müstehaklık Belgesi</a></Table.Cell>
-                            <Table.Cell> <a href={(intern.internshipformUrl)} target="_blank">Başvuru formu</a></Table.Cell>
+                            <Table.Cell><a href={(intern.isgUrl)} target="_blank"><Icon size="small" circular name='file pdf' />İsg Belgesi</a></Table.Cell>
+                            <Table.Cell><a href={(intern.müstehaklıkUrl)} target="_blank"><Icon size="small" circular name='file pdf' />Müstehaklık Belgesi</a></Table.Cell>
+                            <Table.Cell> <a href={(intern.internshipformUrl)} target="_blank"><Icon size="small" circular name='file pdf' />Başvuru formu</a></Table.Cell>
 
                         </Table.Row>
                     ))

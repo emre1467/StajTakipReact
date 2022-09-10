@@ -1,13 +1,18 @@
-import { initializeApp } from "firebase/app";
+/*
+import { getApp, getApps, initializeApp } from "firebase/app";
 import {getStorage} from "firebase/storage";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyByqhgHCUJRzzQjVK76LCy_cHnZ0eoGxwM",
-    authDomain: "fir-react-staj.firebaseapp.com",
-    projectId: "fir-react-staj",
-    storageBucket: "fir-react-staj.appspot.com",
-    messagingSenderId: "113736853264",
-    appId: "1:113736853264:web:5a2cc7bb78f41df1fa6795"
+
+const firebaseConfigg = {
+  apiKey: "AIzaSyAG8zL8keXdGoo_N6Pp7do7xB9gbP6sbv4",
+  authDomain: "fir-tutorial-9e57d.firebaseapp.com",
+  projectId: "fir-tutorial-9e57d",
+  storageBucket: "fir-tutorial-9e57d.appspot.com",
+  messagingSenderId: "606400943004",
+  appId: "1:606400943004:web:619237b37bc7fc81f02e59",
+  measurementId: "G-3ZNW4S3JBW"
   };
-  export const app=initializeApp(firebaseConfig)
-export const storage=getStorage()
+ 
+  export const app=initializeApp(firebaseConfigg)
+ // export const app = !getApps().length ? initializeApp(firebaseConfigg) : getApp();
+export const storage=getStorage()*/

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Container, Dropdown, Icon, List, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Icon, List, Menu } from 'semantic-ui-react';
 import AdminService from '../services/adminService';
 
 export default function AdminPage() {
@@ -28,38 +28,15 @@ useEffect(() => {
 
       </Container>
 
-      <List verticalAlign='big' >
 
 
-        <List.Item>
 
-          <List.Content >
-            <Icon circular name='book' />
-            <Link  style={{ color: "black" }}  to={`/adminPage/${id}/AddCompany`}>Şirket Talebi</Link>
-            
-
-          </List.Content>
-
-        </List.Item>
-
-        <List.Item>
-
-          <List.Content >
-            <Icon circular name='book' />
-            <Link style={{ color: "black" }} to={`/adminPage/${id}/Companies`} /*onClick={() => alert("boo")}*/>Şirketler    </Link>
-          </List.Content>
-
-        </List.Item>
+      <Menu secondary vertical size='big' >
 
 
-      </List>
-
-
-      <Menu secondary vertical>
-        
         <Dropdown item text='Şirketler'>
           <Dropdown.Menu>
-            <Dropdown.Item><Link style={{ color: "deepskyblue" }} to={`/adminPage/${id}/ApprovedConfirmCompanies`}>Onaylanan Şirketler</Link></Dropdown.Item>
+            <Dropdown.Item><Link style={{ color: "black" }} to={`/adminPage/${id}/ApprovedConfirmCompanies`}>Onaylanan Şirketler</Link></Dropdown.Item>
             <Dropdown.Item><Link style={{ color: "black" }} to={`/adminPage/${id}/RejectedConfirmCompanies`}>Onaylanmayan Şirketler</Link></Dropdown.Item>
             <Dropdown.Item><Link style={{ color: "black" }} to={`/adminPage/${id}/UncertainConfirmCompanies`}>Onaylanmayı Bekleyen Şirketler</Link></Dropdown.Item>
           </Dropdown.Menu>
@@ -71,6 +48,12 @@ useEffect(() => {
             <Dropdown.Item><Link style={{ color: "black" }} to={`/adminPage/${id}/UncertainInternshipRequest`}>Onaylanmayı Bekleyen Staj Talepleri</Link></Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
+        <Menu.Item
+name='Çıkış Yap'>
+<Link  style={{ color: "black" ,marginLeft:"-190px"}} to={`/`}>Çıkış Yap</Link>
+
+</Menu.Item>
+
       </Menu>
     </div>
   )

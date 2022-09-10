@@ -1,24 +1,56 @@
+import { getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { Button, Card, Header, Icon, List, Table } from 'semantic-ui-react';
 import InternshipRequestService from '../services/internshipRequestService';
+import { db } from "./firebase-config"
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 
 
 export default function MyInternshipRequestDetail() {
     let { idd } = useParams();
+    let { id } = useParams();
+    const internshipCollectionRef = collection(db, "internshipRequests")
+    const companyCollectionRef = collection(db, "companies")
+    const periodCollectionRef = collection(db, "periods")
     const [internship, setInternship] = useState([])
+    const [company, setCompany] = useState([])
+    const [period, setPeriod] = useState([])
+    const [c,setC] = useState([])
+    const [p,setP] = useState([])
+
+
     useEffect(() => {
-        let internshipService = new InternshipRequestService()
-        internshipService.getInternshipRequestById(idd).then(result => setInternship(result.data.data))
+        //let internshipService = new InternshipRequestService()
+        // internshipService.getInternshipRequestById(idd).then(result => setInternship(result.data.data))
+        
+        const getInternship = async () => {
+            const q = query(internshipCollectionRef, where("id", "==", idd))
+            const data = await getDocs(q);
+            setInternship(data.docs.map((doc) => ({ ...doc.data() })))
+            //setC(data.docs.map((doc) => ({ ...doc.data() }))[0].company)
+            //setP(data.docs.map((doc) => ({ ...doc.data() }))[0].period)
+            
+            const qcompany = query(companyCollectionRef, where("id", "==", data.docs.map((doc) => ({ ...doc.data() }))[0].company))
+            const data1 = await getDocs(qcompany);
+            setCompany(data1.docs.map((doc) => ({ ...doc.data() })))
+            console.log(company)
+            
+            const qperiod = query(periodCollectionRef, where("id", "==", data.docs.map((doc) => ({ ...doc.data() }))[0].period))
+            const data2 = await getDocs(qperiod);
+            setPeriod(data2.docs.map((doc) => ({ ...doc.data() }))[0].name)
+            console.log(data.docs.map((doc) => ({ ...doc.data() }))[0].company)
+ 
+        }
+       
+      getInternship()
     }, [])
-    function gönder(params) {
-        window.location.replace(` ${params}`);
-    }
+    
 
     return (
-        <div style={{ marginTop: "50px"  }}>
-            
-          
+        <div style={{ marginTop: "50px" }}>
+
+
             <Header as="h3">
                 <Icon name="list alternate outline" />
                 <Header.Content>Şirket Bilgileri </Header.Content>
@@ -37,13 +69,13 @@ export default function MyInternshipRequestDetail() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>{
-                    internship.map((intern) => (
-                        <Table.Row key={intern.id}>
-                            <Table.Cell>{intern.company.name}</Table.Cell>
-                            <Table.Cell >{intern.company.address}</Table.Cell>
-                            <Table.Cell><a href={(intern.company.protocolUrl)} target="_blank">Protokol</a></Table.Cell>
-                            <Table.Cell >{intern.company.phoneNumber}</Table.Cell>
-                            <Table.Cell >{intern.company.confirm}</Table.Cell>
+                    company.map((comp) => (
+                        <Table.Row key={comp.id}>
+                            <Table.Cell>{comp.name}</Table.Cell>
+                            <Table.Cell >{comp.address}</Table.Cell>
+                            <Table.Cell><a href={(comp.protocolUrl)} target="_blank">Protokol</a></Table.Cell>
+                            <Table.Cell >{comp.phoneNumber}</Table.Cell>
+                            <Table.Cell >{comp.confirm}</Table.Cell>
                         </Table.Row>
                     ))
                 }
@@ -69,7 +101,7 @@ export default function MyInternshipRequestDetail() {
                 <Table.Body>{
                     internship.map((intern) => (
                         <Table.Row key={intern.id}>
-                            <Table.Cell >{intern.period.name}</Table.Cell>
+                            <Table.Cell >{period}</Table.Cell>
                             <Table.Cell >{intern.confirm}</Table.Cell>
                             <Table.Cell><a href={(intern.isgUrl)} target="_blank">İsg Belgesi</a></Table.Cell>
                             <Table.Cell><a href={(intern.müstehaklıkUrl)} target="_blank">Müstehaklık Belgesi</a></Table.Cell>
@@ -83,7 +115,7 @@ export default function MyInternshipRequestDetail() {
 
             </Table>
 
-            <Table  celled>
+            <Table celled>
                 <Table.Header>
                     <Table.Row>
 
@@ -109,6 +141,6 @@ export default function MyInternshipRequestDetail() {
             </Table>
 
         </div>
-        
+
     )
 }

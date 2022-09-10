@@ -1,13 +1,25 @@
-import React from 'react'
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import StudentService from '../services/studentService'
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 
-export default function AddStudent() {
+import React, { useState } from 'react' 
+import { useEffect } from 'react'
+import { db } from "./firebase-config"
+import { collection, getDocs,addDoc, query,where,updateDoc ,doc} from "firebase/firestore"
+
+export default function AddStudent2() {
 
     let studentService = new StudentService();
+
+    const studentCollectionRef=collection(db,"students")
+    const createUser=async ()=>{
+        const docref=await addDoc(studentCollectionRef,{name:values.name,surname:values.surname,email:values.email,department:values.department,password:values.password,studentNo:values.studentNo, id:10})
+        const stuDoc=doc(db,"students",docref.id)
+        await updateDoc(stuDoc,{id:docref.id})
+    
+    
+    }
 
     const {
         values,
@@ -37,11 +49,14 @@ export default function AddStudent() {
             surname: Yup.string().required("Soyadınızı giriniz"),
         }),
         onSubmit: (values) => {
+            /*
             values.studentId = 0;
             console.log(values);
             studentService.addStudent(values)
                 .then((result) => console.log(result.data.data)).finally(()=>alert("Kaydınız gerçekleşmiştir. Sisteme giriş yapabilirsiniz."))
-
+*/
+createUser()
+alert("Öğrenci Eklendi")
         },
     });
     

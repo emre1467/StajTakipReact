@@ -17,7 +17,7 @@ export default function ApprovedInternshipRequest() {
   
   
     return (
-    <div>
+    <div style={{marginTop:"30px"}}>
          <Header as="h2">
                 <Icon name="list alternate outline" />
                 <Header.Content>Staj Talepleri</Header.Content>

@@ -60,12 +60,20 @@ useEffect(() => {
             const getStudents = async () => {
                 let data = await getDocs(q);
                 setStudents(data.docs.map((doc) => ({ ...doc.data() })))
+                if(data.docs.map((doc) => ({ ...doc.data() })).length==0){
+                    alert("Hatalı giriş!")
+                }
+                else{
+                    window.location.assign(`http://localhost:3000/myPage/${data.docs.map((doc) => ({ ...doc.data() }))[0].id}/profil`)
+
+                }
                 //console.log(studentCollectionRef)
-           
+            console.log(students)
+              
                
             }
             //students.map((stu) => setId(stu.id))
-            getStudents().then(()=>console.log(students )).finally(()=>kontrol())
+            getStudents()
           
             
 

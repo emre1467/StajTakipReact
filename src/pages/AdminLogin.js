@@ -46,24 +46,21 @@ export default function AdminLogin() {
           let data = await getDocs(q);
           setAdmin(data.docs.map((doc) => ({ ...doc.data() })))
           //console.log(studentCollectionRef)
-     
+          if(data.docs.map((doc) => ({ ...doc.data() })).length==0){
+            alert("Hatalı giriş!")
+        }
+        else{
+            window.location.assign(`http://localhost:3000/adminPage/${data.docs.map((doc) => ({ ...doc.data() }))[0].id}/profil`)
+
+        }
          
       }
       //students.map((stu) => setId(stu.id))
-      getAdmin().then(()=>console.log(admin )).finally(()=>kontrol())
+      getAdmin()
     
     },
   });
-  function kontrol() {
-    if (admin.length == 0) {
-      console.log("boş")
-      alert("hatalı giriş ")
-    }
-    else {
-      window.location.assign(`http://localhost:3000/adminPage/${admin[0].id}`)
-
-    }
-  }
+ 
   document.body.style.backgroundImage = "url('https://dijital.ninja/wp-content/uploads/2021/01/purple-background-1920x1080_c.jpg')";
 
   return (

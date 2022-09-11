@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams ,useHistory} from 'react-router-dom'
 import { Button, Container, Dropdown, Icon, List, Menu } from 'semantic-ui-react';
 import AdminService from '../services/adminService';
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
@@ -27,7 +27,12 @@ export default function AdminPage() {
 
 
   }, [])
-
+const history=useHistory()
+  function logOut(){
+    history.replace("/adminLogin", "urlhistory");
+    //history.push(`/`);
+    //window.location.assign(`http://localhost:3000/`)
+  }
 
   return (
     <div>
@@ -64,7 +69,7 @@ export default function AdminPage() {
         </Dropdown>
         <Menu.Item
           name='Çıkış Yap'>
-          <Link style={{ color: "black", marginLeft: "-125px" }} to={`/`}>Çıkış Yap</Link>
+          <Link onClick={logOut} style={{ color: "black", marginLeft: "-125px" }} >Çıkış Yap</Link>
 
         </Menu.Item>
 

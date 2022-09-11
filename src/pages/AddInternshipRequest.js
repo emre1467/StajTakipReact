@@ -113,8 +113,13 @@ export default function AddInternshipRequest() {
             while (k < 1) {
                 k = k + 1;
                 console.log("içinde")
+if(values.company==""||values.period==""||values.endDate==""||values.startDate==""||values.workDay==""||z==null||isg==null||internshipform==null){
+    alert("değerler boş olamaz")
+}
+else{
+    formHandler()
 
-                formHandler()
+}
             }
 
 

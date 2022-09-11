@@ -2,15 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Header, Icon, Table } from 'semantic-ui-react'
 import CompanyService from '../services/companyService'
+import { db } from "./firebase-config"
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 
 export default function UncertainConfirmCompanies() {
     let { id} = useParams();
 
     const [companies,setCompany]=useState([])
-    let confirm="Onaylanmayı bekliyor"
+    const companyCollectionRef = collection(db, "companies")
+
       useEffect(() => {
-        let companyService=new CompanyService()
-        companyService.getByConfirmCompanies(confirm).then(result=>setCompany(result.data.data))
+        //companyService.getByConfirmCompanies(confirm).then(result=>setCompany(result.data.data))
+      const getCompany = async () => {
+        const q = query(companyCollectionRef, where("confirm", "==", "Onaylanmayı bekliyor"))
+        const data = await getDocs(q);
+        setCompany(data.docs.map((doc) => ({ ...doc.data() })))
+  
+      }
+  
+      getCompany()
       }, [])
       
     return (
@@ -36,7 +46,7 @@ export default function UncertainConfirmCompanies() {
                           <Table.Row key={company.companyId}>
                               <Table.Cell>{company.name}</Table.Cell>
                               <Table.Cell>{company.confirm}</Table.Cell>
-                              <Table.Cell><Link to={`/adminPage/${id}/UncertainConfirmCompanies/${company.companyId}`}> Görüntüle</Link></Table.Cell>
+                              <Table.Cell><Link to={`/adminPage/${id}/UncertainConfirmCompanies/${company.id}`}> Görüntüle</Link></Table.Cell>
                           
                           </Table.Row>
   

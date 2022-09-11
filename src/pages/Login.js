@@ -14,8 +14,7 @@ export default function Login() {
     const [students, setStudents] = useState([])
     const [id, setId] = useState()
 useEffect(() => {
-  
-    localStorage.clear();
+    window.localStorage.clear()
 
 }, [])
 

@@ -4,10 +4,14 @@ import { Link } from 'react-router-dom';
 import { Button, Card, Form, Grid, Image } from 'semantic-ui-react';
 import * as Yup from "yup";
 import AdminService from '../services/adminService';
+import { db } from "./firebase-config"
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 
 
 export default function AdminLogin() {
-  let adminService = new AdminService();
+
+  const adminCollectionRef=collection(db,"admins")
+  const [admin,setAdmin]=useState([])
   const [e, setE] = useState()
 
   const {
@@ -31,22 +35,40 @@ export default function AdminLogin() {
     }),
 
     onSubmit: (values) => {
-      adminService.getAdminsByEmailandPassword(values.email, values.password)
-        .then(result => setE(result.data.data[0].adminId))
-      console.log(e)
-      if (e != null) {
-        window.location.assign(`http://localhost:3000/adminPage/${e}`)
-
+      //adminService.getAdminsByEmailandPassword(values.email, values.password)
+      //  .then(result => setE(result.data.data[0].adminId))
+      // console.log(e)
+      // if (e != null) {
+      //    window.location.assign(`http://localhost:3000/adminPage/${e}`)
+      //}
+      const q = query(adminCollectionRef, where("email", "==", values.email), where("password", "==", values.password))
+      const getAdmin = async () => {
+          let data = await getDocs(q);
+          setAdmin(data.docs.map((doc) => ({ ...doc.data() })))
+          //console.log(studentCollectionRef)
+     
+         
       }
-
-
+      //students.map((stu) => setId(stu.id))
+      getAdmin().then(()=>console.log(admin )).finally(()=>kontrol())
+    
     },
   });
+  function kontrol() {
+    if (admin.length == 0) {
+      console.log("boş")
+      alert("hatalı giriş ")
+    }
+    else {
+      window.location.assign(`http://localhost:3000/adminPage/${admin[0].id}`)
+
+    }
+  }
   document.body.style.backgroundImage = "url('https://dijital.ninja/wp-content/uploads/2021/01/purple-background-1920x1080_c.jpg')";
 
   return (
-    <div align="center" style={{ marginTop: '150px' ,fontFamily: 'Josefin Sans'} }>
-      <Card widths="equal" image='/resim.png' color='blue' style={{ borderRadius: "15px 15px 15px 15px"}}>
+    <div align="center" style={{ marginTop: '150px', fontFamily: 'Josefin Sans' }}>
+      <Card widths="equal" image='/resim.png' color='blue' style={{ borderRadius: "15px 15px 15px 15px" }}>
 
         <Card.Content header="Giriş Yap">
 

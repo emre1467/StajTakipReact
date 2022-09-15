@@ -13,33 +13,36 @@ export default function Profil() {
     const studentCollectionRef = collection(db, "students")
 
     useEffect(function () {
-       // studentService.getById(id).then(result => setS(result.data.data[0]))
+        // studentService.getById(id).then(result => setS(result.data.data[0]))
 
 
         const q = query(studentCollectionRef, where("id", "==", id))
         const getStudents = async () => {
             let data = await getDocs(q);
             setS(data.docs.map((doc) => ({ ...doc.data() })))
+            console.log(data.docs.map((doc) => ({ ...doc.data() })))
             //console.log(studentCollectionRef)
-
 
         }
         //students.map((stu) => setId(stu.id))
         getStudents().then(() => console.log(s))
+        const çal = async () => {
+            const q = query(studentCollectionRef, where("id", "==", id))
 
+            let data = await getDocs(q);
+            setS(data.docs.map((doc) => ({ ...doc.data() })))
 
+            values.password = data.docs.map((doc) => ({ ...doc.data() }))[0].password
+            values.email = data.docs.map((doc) => ({ ...doc.data() }))[0].email
+            values.name = data.docs.map((doc) => ({ ...doc.data() }))[0].name
+            values.surname = data.docs.map((doc) => ({ ...doc.data() }))[0].surname
+            values.department = data.docs.map((doc) => ({ ...doc.data() }))[0].department
+            values.studentNo = data.docs.map((doc) => ({ ...doc.data() }))[0].studentNo
+        }
+        çal()
 
     }, [])
-    function çal() {
-        values.password = s.password
-        values.email = s.email
-        values.name = s.name
-        values.surname = s.surname
-        values.department = s.department
-        values.studentNo = s.studentNo
-        values.studentId = id;
-    }
-    let dp = (s);
+
 
     const {
         values,
@@ -70,15 +73,34 @@ export default function Profil() {
         }),
         onSubmit: (values) => {
             //values.studentId = id;
-           // console.log(values);
+            // console.log(values);
             //studentService.updateStudent(values).then(result => console.log(result))
             //alert("Bilgileriniz güncellendi")
+
+            const güncelle = async () => {
+
+                const q = query(studentCollectionRef, where("id", "==", id))
+                let data = await getDocs(q);
+                setS(data.docs.map((doc) => ({ ...doc.data() })))
+                const stuDoc = doc(db, "students", id)
+                await updateDoc(stuDoc, { name: values.name, surname: values.surname,department:values.department,password:values.password,email:values.email,studentNo:values.studentNo })
+                alert("Bilgiler güncellendi")
+            }
+            if (values.name == "" || values.surname == "" || values.password == "" || values.studentNo == "" || values.department == "" || values.email == "") {
+                alert("Alanları Boş bırakmayınız")
+                console.log("boş")
+
+            } else {
+                güncelle()
+
+            }
+            
         },
     });
 
     return (
 
-        <div className="form" align="center" style={{ marginTop: "80px" }} onLoad={çal()}>
+        <div className="form" align="center" style={{ marginTop: "80px" }}>
             <Card   >
                 <Card.Content header="BİLGİLERİM"></Card.Content>
                 <Card.Content>

@@ -42,9 +42,9 @@ export default function AddInternshipRequest() {
         //companyService.getCompanies().then((result) => setCompanies(result.data.data))
         //let periodService = new PeriodService();
         //periodService.getPeriods().then((result) => setPeriods(result.data.data))
-
+        const q=query(companyCollectionRef,where("confirm","==","Onaylandı"))
         const getCompanies = async () => {
-            let data = await getDocs(companyCollectionRef);
+            let data = await getDocs(q);
             setCompanies(data.docs.map((doc) => ({ ...doc.data() })))
             //console.log(studentCollectionRef)
             

@@ -11,7 +11,6 @@ import AddInternshipRequest from '../pages/AddInternshipRequest';
 import MyInternshipRequestDetail from '../pages/MyInternshipRequestDetail';
 import File from '../pages/File';
 import AdminLogin from '../pages/AdminLogin';
-import Navi from './Navi';
 import { Grid, GridColumn } from 'semantic-ui-react';
 import FileUploadd from '../pages/FileUploadd';
 import FirebaseFile from '../pages/FirebaseFile';
@@ -35,12 +34,7 @@ export default function Dashboard() {
     return (
         <div >
             <Route exact path="/" component={Login} />
-            <Route exact path="/1" component={FileUploadd} />
-            <Route exact path="/2" component={FirebaseFile} />
-            <Route exact path="/3" component={AddCompany} />
             <Route exact path="/adminLogin" component={AdminLogin} />
-            <Route exact path="/4" component={FirebaseDeneme} />
-            <Route exact path="/5" component={AddStudent2} />
 
 
 

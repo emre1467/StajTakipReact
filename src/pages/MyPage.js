@@ -10,8 +10,6 @@ import Dashboard from "../layouts/Dashboard";
 import { useEffect, useState } from "react";
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 import { db } from "./firebase-config"
-import {browserHistory} from 'react-router'
-
 //import { useParams } from 'react-router-dom';
 
 export default function MyPage() {
@@ -42,8 +40,22 @@ export default function MyPage() {
   }, [])
 const history=useHistory()
 function logOut(){
-  history.replace("/", "urlhistory");
-  //history.push(`/`);
+  //let state = { ...history.location.state };
+ // delete state.transaction
+ // history.replace({ ...history.location, state });
+   // sessionStorage.clear()
+    //localStorage.clear()
+   //history.index=0;
+    //history.go(-(history.length - 1))
+    //history.go("/")
+
+//window.location.reload()
+//window.history.replaceState(null, null, "/");
+//localStorage.clear()
+//window.location.href = 'http://localhost:3000'
+history.replace("/", "urlhistory");
+
+ //history.push(`/`);
   //window.location.assign(`http://localhost:3000/`)
 }
 
@@ -72,7 +84,7 @@ function logOut(){
 
           <List.Content style={{ Color: "red" }}>
             <Icon size="small" circular name='book' />
-            <Link style={{ color: "black" }}  /*onClick={() => alert("boo")}*/>Staj Taleplerim    </Link>
+            <Link style={{ color: "black" }} to={`/myPage/${id}/MyInternshipRequest`}  /*onClick={() => alert("boo")}*/>Staj Taleplerim    </Link>
           </List.Content>
 
         </List.Item>
@@ -99,7 +111,8 @@ function logOut(){
 
         <List.Content style={{ align:"left" }}>
           <Icon size="small" circular name='user' />
-          <Link onClick={logOut} style={{ color: "black" }} to={`/`} /*onClick={() => alert("boo")}*/>Çıkış    </Link>
+          <Link onClick={logOut} style={{ color: "black" }}  /*onClick={() => alert("boo")}*/>Çıkış    </Link>
+        
         </List.Content>
       </List>
 

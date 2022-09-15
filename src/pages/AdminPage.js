@@ -29,7 +29,11 @@ export default function AdminPage() {
   }, [])
 const history=useHistory()
   function logOut(){
-    history.replace("/adminLogin", "urlhistory");
+    localStorage.clear()
+    sessionStorage.clear()
+    history.replace("/", "urlhistory");
+ history.push(`/`);
+    
     //history.push(`/`);
     //window.location.assign(`http://localhost:3000/`)
   }

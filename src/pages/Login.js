@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Card, Form, Grid, Icon, Image } from 'semantic-ui-react';
 import * as Yup from "yup";
 import StudentService from '../services/studentService'
@@ -13,10 +13,22 @@ export default function Login() {
     const studentCollectionRef = collection(db, "students")
     const [students, setStudents] = useState([])
     const [id, setId] = useState()
-useEffect(() => {
-    window.localStorage.clear()
+const history=useHistory()
 
-}, [])
+    useEffect(() => {
+        window.localStorage.clear()
+        sessionStorage.clear()
+        localStorage.clear()
+        sessionStorage.clear()
+        window.history.replaceState(null, null, "/");
+
+        //localStorage.clear()
+        //history.index=0;
+        //history.go(-(history.length - 1))
+    
+      history.replace("/");
+      //history.replace("/", "urlhistory");
+    }, [])
 
     let studentService = new StudentService();
     const [e, setE] = useState()
@@ -41,56 +53,56 @@ useEffect(() => {
         }),
 
         onSubmit: (values) => {
-/*
-            studentService.getStudentsByEmailandPassword(values.email, values.password)
-                .then(result => (setE(result)
-                ))
-            if (e.data.success == true) {
-                console.log(e.data.success)
-                window.location.assign(`http://localhost:3000/myPage/${e.data.data[0].studentId}/profil`)
-
-            }
-            else if (e.data.success == false) {
-                console.log(e.data.success)
-                alert("Yanlış kullanıcı adı veya şifre")
-
-            }*/
+            /*
+                        studentService.getStudentsByEmailandPassword(values.email, values.password)
+                            .then(result => (setE(result)
+                            ))
+                        if (e.data.success == true) {
+                            console.log(e.data.success)
+                            window.location.assign(`http://localhost:3000/myPage/${e.data.data[0].studentId}/profil`)
+            
+                        }
+                        else if (e.data.success == false) {
+                            console.log(e.data.success)
+                            alert("Yanlış kullanıcı adı veya şifre")
+            
+                        }*/
 
             const q = query(studentCollectionRef, where("email", "==", values.email), where("password", "==", values.password))
             const getStudents = async () => {
                 let data = await getDocs(q);
                 setStudents(data.docs.map((doc) => ({ ...doc.data() })))
-                if(data.docs.map((doc) => ({ ...doc.data() })).length==0){
+                if (data.docs.map((doc) => ({ ...doc.data() })).length == 0) {
                     alert("Hatalı giriş!")
                 }
-                else{
-                    window.location.assign(`http://localhost:3000/myPage/${data.docs.map((doc) => ({ ...doc.data() }))[0].id}/profil`)
+                else {
+                    window.location.assign(`/myPage/${data.docs.map((doc) => ({ ...doc.data() }))[0].id}/profil`)
 
                 }
                 //console.log(studentCollectionRef)
-            console.log(students)
-              
-               
+                console.log(students)
+
+
             }
             //students.map((stu) => setId(stu.id))
             getStudents()
-          
-            
+
+
 
 
         },
 
     });
-function kontrol(){
-    if(students.length==0){
-        console.log("boş")
-        alert("hatalı giriş ")
-       }
-       else{
-        window.location.assign(`http://localhost:3000/myPage/${students[0].id}/profil`)
+    function kontrol() {
+        if (students.length == 0) {
+            console.log("boş")
+            alert("hatalı giriş ")
+        }
+        else {
+            window.location.assign(`http://localhost:3000/myPage/${students[0].id}/profil`)
 
-       }
-}
+        }
+    }
     let img = 'Images/resim.jpg'
     document.body.style.backgroundImage = "url('https:/dijital.ninja/wp-content/uploads/2021/01/purple-background-1920x1080_c.jpg')";
     return (

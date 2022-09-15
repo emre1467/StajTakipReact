@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Card, Form, Grid, Image } from 'semantic-ui-react';
 import * as Yup from "yup";
@@ -13,6 +13,10 @@ export default function AdminLogin() {
   const adminCollectionRef=collection(db,"admins")
   const [admin,setAdmin]=useState([])
   const [e, setE] = useState()
+  useEffect(() => {
+    window.localStorage.clear()
+
+}, [])
 
   const {
     values,
@@ -50,7 +54,7 @@ export default function AdminLogin() {
             alert("Hatalı giriş!")
         }
         else{
-            window.location.assign(`http://localhost:3000/adminPage/${data.docs.map((doc) => ({ ...doc.data() }))[0].id}/profil`)
+            window.location.assign(`/adminPage/${data.docs.map((doc) => ({ ...doc.data() }))[0].id}/profil`)
 
         }
          

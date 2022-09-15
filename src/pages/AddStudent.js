@@ -4,8 +4,21 @@ import { useFormik } from "formik";
 import StudentService from '../services/studentService'
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { db } from "./firebase-config"
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
+
+const studentCollectionRef = collection(db, "students")
 
 export default function AddStudent() {
+    const createStudent = async () => {
+
+        const docref = await addDoc(studentCollectionRef, { name: values.name, surname: values.surname, studentNo: values.studentNo, password: values.password, email: values.email, department: values.department, id: 10 })
+        const stuDoc = doc(db, "students", docref.id)
+        await updateDoc(stuDoc, { id: docref.id })
+        alert("Öğrenci eklendi")
+
+    }
+
 
     let studentService = new StudentService();
 
@@ -24,7 +37,7 @@ export default function AddStudent() {
             email: "",
             name: "",
             password: "",
-            studentId: "0",
+            id: "0",
             studentNo: "",
             surname: "",
         },
@@ -37,14 +50,17 @@ export default function AddStudent() {
             surname: Yup.string().required("Soyadınızı giriniz"),
         }),
         onSubmit: (values) => {
-            values.studentId = 0;
-            console.log(values);
-            studentService.addStudent(values)
-                .then((result) => console.log(result.data.data)).finally(()=>alert("Kaydınız gerçekleşmiştir. Sisteme giriş yapabilirsiniz."))
+            if (values.name == "" || values.surname == "" || values.password == "" || values.studentNo == "" || values.department == "" || values.email == "") {
+                alert("Alanları Boş bırakmayınız")
+                console.log("boş")
 
+            } else {
+                createStudent()
+
+            }
         },
     });
-    
+
     return (
 
         <div align="center" className="form" style={{ marginTop: '50px', marginLeft: '130px' }}>
@@ -103,7 +119,8 @@ export default function AddStudent() {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.department}
-
+                                error={
+                                    errors.department && touched.department}
                                 label="Bölüm"
                                 placaholder="Bölüm giriniz"
                             ></Form.Input>
@@ -114,10 +131,12 @@ export default function AddStudent() {
                                 id="password"
                                 type="text"
                                 onChange={handleChange}
-                                 onBlur={handleBlur}
+                                onBlur={handleBlur}
                                 value={values.password}
-
-                            label="Şifre"
+                                error={
+                                    errors.password && touched.password}
+                               
+                                label="Şifre"
                             //placaholder="Şifre girinizz"
                             ></Form.Input>
                         </Form.Group>
@@ -129,15 +148,17 @@ export default function AddStudent() {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.studentNo}
-
+                                error={
+                                    errors.studentNo && touched.studentNo}
+                               
                                 label="Okul Numara"
                                 placaholder="Okul numaranızı giriniz"
                             ></Form.Input>
                         </Form.Group>
-                        <a href='http://localhost:3000/' style={{marginRight:"20px"}}>Giriş Sayfası</a>
+                        <a href='/' style={{ marginRight: "20px" }}>Giriş Sayfası</a>
 
                         <Button handlereset={handlereset} type="submit" disabled={!dirty} primary> Kayıt Ol</Button>
-                    
+
                     </Form>
                 </Card.Content>
             </Card>

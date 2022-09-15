@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Header, Icon, Table } from 'semantic-ui-react'
 import CompanyService from '../services/companyService'
+import { db } from "./firebase-config"
+import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 
 export default function Companies() {
+  const companyCollectionRef=collection(db,"companies")
     const [companies,setCompany]=useState([])
     useEffect(() => {
-      let companyService=new CompanyService()
-      companyService.getCompanies().then(result=>setCompany(result.data.data))
+      const getCompany = async () => {
+        let data = await getDocs(companyCollectionRef);
+        setCompany(data.docs.map((doc) => ({ ...doc.data() })))
+      
+    }
+    getCompany()
+   
     }, [])
     
   return (
-    <div>
+    <div style={{marginTop:"30px"}}>
          <Header as="h2">
                 <Icon name="list alternate outline" />
                 <Header.Content>Şirketler</Header.Content>
@@ -21,6 +29,8 @@ export default function Companies() {
                     <Table.Row>
                         
                         <Table.HeaderCell>Ad</Table.HeaderCell>
+                        <Table.HeaderCell>Adres</Table.HeaderCell>
+                        <Table.HeaderCell>Telefon Numarası</Table.HeaderCell>
                         <Table.HeaderCell>Onay Durumu </Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -31,6 +41,8 @@ export default function Companies() {
 
                         <Table.Row key={company.companyId}>
                             <Table.Cell>{company.name}</Table.Cell>
+                            <Table.Cell>{company.address}</Table.Cell>
+                            <Table.Cell>{company.phoneNumber}</Table.Cell>
                             <Table.Cell>{company.confirm}</Table.Cell>
                         </Table.Row>
 

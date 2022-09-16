@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Table } from 'semantic-ui-react'
-import StudentService from '../services/studentService'
 
 export default function StudentList() {
     const [students, setStudents] = useState([])
 
     useEffect(() => {
-        let studentService = new StudentService()
-        studentService.getStudents().then(result => setStudents(result.data.data))
     }, [])
 
 

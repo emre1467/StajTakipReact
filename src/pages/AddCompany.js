@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 import { storage } from "./firebase-config"
-import CompanyService from '../services/companyService';
 import { db } from "./firebase-config"
 import { collection, getDocs,addDoc, query,where,updateDoc ,doc} from "firebase/firestore"
 
@@ -19,7 +18,6 @@ export default function AddCompany() {
     
   
   }
-  let companyService = new CompanyService();
   const {
     values,
     errors,

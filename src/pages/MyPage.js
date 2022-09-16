@@ -1,7 +1,6 @@
 //import React, { useState } from 'react'
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import StudentService from '../services/studentService'
 import { Button, Card, Icon, Container, Form, Grid, GridColumn, Image, List, Menu, Dropdown, DropdownItem, } from 'semantic-ui-react';
 //import { useState } from "react";
 import { Link, Route, useParams ,useHistory} from "react-router-dom";

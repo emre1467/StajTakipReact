@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { Button, Header, Icon, Table } from 'semantic-ui-react';
-import InternshipRequestService from '../services/internshipRequestService';
 import { db } from "./firebase-config"
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 

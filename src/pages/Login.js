@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import { Button, Card, Form, Grid, Icon, Image } from 'semantic-ui-react';
 import * as Yup from "yup";
-import StudentService from '../services/studentService'
 import { db } from "./firebase-config"
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 
@@ -30,7 +29,6 @@ const history=useHistory()
       //history.replace("/", "urlhistory");
     }, [])
 
-    let studentService = new StudentService();
     const [e, setE] = useState()
     const {
         values,

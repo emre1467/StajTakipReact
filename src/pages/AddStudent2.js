@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import StudentService from '../services/studentService'
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 
 import React, { useState } from 'react' 
@@ -10,7 +9,6 @@ import { collection, getDocs,addDoc, query,where,updateDoc ,doc} from "firebase/
 
 export default function AddStudent2() {
 
-    let studentService = new StudentService();
 
     const studentCollectionRef=collection(db,"students")
     const createUser=async ()=>{

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Card, Form, Grid, Image } from 'semantic-ui-react';
 import * as Yup from "yup";
-import AdminService from '../services/adminService';
 import { db } from "./firebase-config"
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import StudentService from '../services/studentService'
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
@@ -9,7 +8,6 @@ import { db } from "./firebase-config"
 export default function Profil() {
     let { id } = useParams();
     const [s, setS] = useState([])
-    let studentService = new StudentService();
     const studentCollectionRef = collection(db, "students")
 
     useEffect(function () {

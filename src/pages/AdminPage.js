@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams ,useHistory} from 'react-router-dom'
 import { Button, Container, Dropdown, Icon, List, Menu } from 'semantic-ui-react';
-import AdminService from '../services/adminService';
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
 import { db } from "./firebase-config"
 

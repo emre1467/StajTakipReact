@@ -1,7 +1,6 @@
 import React from 'react'
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import StudentService from '../services/studentService'
 import { Button, Card, Form, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { db } from "./firebase-config"
@@ -20,7 +19,6 @@ export default function AddStudent() {
     }
 
 
-    let studentService = new StudentService();
 
     const {
         values,

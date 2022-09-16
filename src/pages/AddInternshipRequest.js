@@ -4,9 +4,6 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Card, Form, FormSelect, Select } from 'semantic-ui-react';
-import CompanyService from "../services/companyService"
-import InternshipRequestService from "../services/internshipRequestService"
-import PeriodService from "../services/periodService";
 import { storage } from "./firebase-config"
 import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
 import { collection, getDocs, addDoc, query, where, updateDoc, doc } from "firebase/firestore"
